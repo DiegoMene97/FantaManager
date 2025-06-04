@@ -1,31 +1,37 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Area Personale</title>
+  <meta charset="UTF-8" />
+  <title>FantaManager - Area Personale</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
-<body>
-  <h2>Area personale</h2>
-  <div id="contenuto"></div>
+<body onload="initDashboard()">
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const username = params.get("user");
+  <div class="container">
+    <!-- Colonna sinistra: Rosa personale -->
+    <aside class="rosa">
+      <h2>La tua rosa</h2>
+      <ul id="listaRosa"></ul>
+    </aside>
 
-    const rose = {
-      "diego": ["Maignan", "Dimarco", "Zirkzee"],
-      "alberto": ["Provedel", "Bremer", "Lukaku"]
-    };
+    <!-- Colonna destra: Campo + Formazione -->
+    <main class="campo-area">
+      <div class="formazione-header">
+        <label for="modulo">Modulo:</label>
+        <select id="modulo" onchange="aggiornaCampo()">
+          <option value="442">4-4-2</option>
+          <option value="433">4-3-3</option>
+          <option value="343">3-4-3</option>
+          <option value="352">3-5-2</option>
+        </select>
+      </div>
 
-    if (!username || !rose[username]) {
-      document.getElementById("contenuto").innerHTML = "Accesso non valido.";
-    } else {
-      document.getElementById("contenuto").innerHTML = `
-        <h3>Benvenuto, ${username}</h3>
-        <p>La tua rosa:</p>
-        <ul>${rose[username].map(gioc => `<li>${gioc}</li>`).join('')}</ul>
-      `;
-    }
-  </script>
+      <div class="campo" id="campo"></div>
+
+      <button onclick="salvaFormazione()">Salva formazione</button>
+    </main>
+  </div>
+
 </body>
 </html>
