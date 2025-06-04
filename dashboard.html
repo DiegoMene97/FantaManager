@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Area Personale</title>
+</head>
+<body>
+  <h2>Area personale</h2>
+  <div id="contenuto"></div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const username = params.get("user");
+
+    const rose = {
+      "diego": ["Maignan", "Dimarco", "Zirkzee"],
+      "alberto": ["Provedel", "Bremer", "Lukaku"]
+    };
+
+    if (!username || !rose[username]) {
+      document.getElementById("contenuto").innerHTML = "Accesso non valido.";
+    } else {
+      document.getElementById("contenuto").innerHTML = `
+        <h3>Benvenuto, ${username}</h3>
+        <p>La tua rosa:</p>
+        <ul>${rose[username].map(gioc => `<li>${gioc}</li>`).join('')}</ul>
+      `;
+    }
+  </script>
+</body>
+</html>
