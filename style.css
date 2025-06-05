@@ -1,156 +1,126 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f4f6f8;
-  color: #222;
+  font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0;
+  background: #f7f7f7;
 }
 
-h1 {
-  background-color: #0077cc;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #004aad;
   color: white;
   padding: 1rem;
+}
+
+header h1 {
   margin: 0;
-  text-align: center;
 }
 
-section {
-  margin: 2rem auto;
-  max-width: 800px;
-  background-color: white;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-label, select, input[type="checkbox"] {
-  display: block;
-  margin: 0.5rem 0;
-}
-
-select, button {
-  padding: 0.5rem;
-  font-size: 1rem;
-}
-
-#giocatoriContainer > div {
-  margin: 0.25rem 0;
-}
-
-button {
-  background-color: #0077cc;
-  color: white;
+.top-buttons button {
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  background: #fff;
+  color: #004aad;
   border: none;
   border-radius: 5px;
-  margin-top: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #005fa3;
-}
-
-#risultato {
-  font-weight: bold;
-  margin-top: 1rem;
-}
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background-color: #f0f2f5;
-}
-
-.container {
+main {
   display: flex;
-  height: 100vh;
+  flex-wrap: wrap;
+  padding: 2rem;
+  gap: 2rem;
 }
 
-.rosa {
-  width: 30%;
-  background-color: #fff;
+.column {
+  background: white;
   padding: 1rem;
-  overflow-y: auto;
-  border-right: 1px solid #ddd;
-}
-
-.rosa ul {
-  list-style: none;
-  padding: 0;
-}
-
-.rosa li {
-  padding: 6px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #eee;
-}
-
-.campo-area {
-  width: 70%;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.formazione-header {
-  margin-bottom: 1rem;
-}
-
-.campo {
-  flex-grow: 1;
-  background: green;
   border-radius: 10px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+  flex: 1 1 45%;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.linea {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.posizione select {
-  padding: 4px;
-}
-.container {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-}
-
-.rosa {
-  width: 25%;
-  background: #f5f5f5;
-  border-radius: 10px;
-  padding: 10px;
-  overflow-y: auto;
-  max-height: 80vh;
-}
-
-.campo-container {
-  width: 75%;
-}
-
-.campo {
-  background-color: green;
-  border-radius: 15px;
-  height: 500px;
-  position: relative;
-  margin: 20px 0;
-}
-
-.posizione {
-  position: absolute;
-  width: 80px;
-  height: 40px;
-  transform: translate(-50%, -50%);
-}
-
-.posizione select {
+#tabella-classifica {
   width: 100%;
-  padding: 5px;
+  border-collapse: collapse;
 }
+
+#tabella-classifica th, #tabella-classifica td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
+}
+✅ 3. Nuova pagina register.html (registrazione utenti)
+html
+Copia
+Modifica
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Registrazione - FantaManager</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section class="register-form">
+    <h2>Registrati al Campionato</h2>
+    <form id="formRegistrazione">
+      <label for="username">Username:</label>
+      <input type="text" id="username" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" required>
+
+      <button type="submit">Registrati</button>
+    </form>
+  </section>
+
+  <script>
+    document.getElementById('formRegistrazione').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Salva su localStorage (da sostituire con backend in futuro)
+      localStorage.setItem(`utente_${username}`, JSON.stringify({ username, password }));
+      alert("Registrazione completata!");
+      window.location.href = "area_riservata.html";
+    });
+  </script>
+</body>
+</html>
+✅ 4. Script base (script.js) per popolare calendario e classifica
+javascript
+Copia
+Modifica
+document.addEventListener("DOMContentLoaded", function () {
+  const giornataPrecedente = {
+    numero: 4,
+    partite: ["Diego FC 2-1 Alberto United", "Luca FC 0-0 Marco 11"]
+  };
+
+  const giornataAttuale = {
+    numero: 5,
+    partite: ["Diego FC vs Marco 11", "Alberto United vs Luca FC"]
+  };
+
+  document.getElementById("giornata-precedente").textContent = `#${giornataPrecedente.numero} - ${giornataPrecedente.partite.join(", ")}`;
+  document.getElementById("giornata-attuale").textContent = `#${giornataAttuale.numero} - ${giornataAttuale.partite.join(", ")}`;
+
+  const classifica = [
+    { squadra: "Diego FC", punti: 10, v: 3, p: 1, s: 0, dr: "+5" },
+    { squadra: "Alberto United", punti: 7, v: 2, p: 1, s: 1, dr: "+2" },
+    { squadra: "Luca FC", punti: 5, v: 1, p: 2, s: 1, dr: "0" },
+    { squadra: "Marco 11", punti: 1, v: 0, p: 1, s: 3, dr: "-7" },
+  ];
+
+  const tbody = document.querySelector("#tabella-classifica tbody");
+  classifica.sort((a, b) => b.punti - a.punti);
+  classifica.forEach(team => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${team.squadra}</td><td>${team.punti}</td><td>${team.v}</td><td>${team.p}</td><td>${team.s}</td><td>${team.dr}</td>`;
+    tbody.appendChild(row);
+  });
+});
