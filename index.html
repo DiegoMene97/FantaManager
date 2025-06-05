@@ -1,181 +1,50 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fantacalcio Mantra</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FantaManager</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Fantacalcio Diego - Mantra</h1>
-<a href="login.html" style="
-  display: inline-block;
-  background-color: #007BFF;
-  color: white;
-  padding: 12px 24px;
-  font-size: 16px;
-  border-radius: 8px;
-  text-decoration: none;
-  margin-top: 20px;
-">
-Area Riservata
-</a>
+  <header>
+    <h1>FantaManager</h1>
+    <div class="top-buttons">
+      <button onclick="location.href='register.html'">Registrati</button>
+      <button onclick="location.href='area_riservata.html'">Area Riservata</button>
+    </div>
+  </header>
 
-  <section id="squadre">
-    <h2>Squadre</h2>
-    <ul id="elencoSquadre">
-      <!-- Squadre caricate via JS -->
-    </ul>
-  </section>
-
-  <section id="formazione">
-    <h2>Schiera Formazione</h2>
-    <label for="squadra">Squadra:</label>
-    <select id="squadra">
-      <!-- Popolato da JS -->
-    </select>
-
-    <label for="modulo">Modulo:</label>
-    <select id="modulo">
-      <option value="3-4-3">3-4-3</option>
-      <option value="3-5-2">3-5-2</option>
-      <option value="4-3-3">4-3-3</option>
-      <option value="4-4-2">4-4-2</option>
-      <option value="4-5-1">4-5-1</option>
-      <option value="5-3-2">5-3-2</option>
-      <option value="5-4-1">5-4-1</option>
-      <option value="3-4-1-2">3-4-1-2</option>
-      <option value="4-3-1-2">4-3-1-2</option>
-      <option value="3-5-1-1">3-5-1-1</option>
-      <option value="4-2-3-1">4-2-3-1</option>
-    </select>
-
-    <div id="giocatoriContainer">
-      <!-- Qui i giocatori della rosa da schierare -->
+  <main>
+    <div class="column" id="colonna-calendario">
+      <h2>Calendario</h2>
+      <div id="calendario-preview">
+        <p><strong>Giornata Precedente:</strong> <span id="giornata-precedente">Caricamento...</span></p>
+        <p><strong>Giornata Attuale:</strong> <span id="giornata-attuale">Caricamento...</span></p>
+        <a href="calendario.html" target="_blank">Vedi Calendario Completo</a>
+      </div>
     </div>
 
-    <button onclick="salvaFormazione()">Salva Formazione</button>
-    <button onclick="calcolaPunteggio()">Calcola Punteggio</button>
-    <p id="risultato"></p>
-  </section>
+    <div class="column" id="colonna-classifica">
+      <h2>Classifica</h2>
+      <table id="tabella-classifica">
+        <thead>
+          <tr>
+            <th>Squadra</th>
+            <th>Pt</th>
+            <th>V</th>
+            <th>P</th>
+            <th>S</th>
+            <th>DR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Popolamento JS -->
+        </tbody>
+      </table>
+    </div>
+  </main>
 
-  <section id="calendario">
-    <h2>Calendario</h2>
-    <ul id="elencoPartite">
-      <!-- Generato da JS -->
-    </ul>
-  </section>
-
-  <section id="classifica">
-    <h2>Classifica</h2>
-    <ol id="elencoClassifica">
-      <!-- Generato da JS -->
-    </ol>
-  </section>
-
-  <script>
-    const rose = {
-      "Squadra A": [
-        { nome: "Donnarumma", ruolo: "Por", voto: 6.5, tipo: "P" },
-        { nome: "Bastoni", ruolo: "Dc", voto: 6, tipo: "D" },
-        { nome: "Theo", ruolo: "Ds", voto: 7, tipo: "D" },
-        { nome: "Barella", ruolo: "C", voto: 6.5, tipo: "C" },
-        { nome: "Lautaro", ruolo: "Pc", voto: 8, tipo: "A" }
-      ],
-      "Squadra B": [
-        { nome: "Szczesny", ruolo: "Por", voto: 6, tipo: "P" },
-        { nome: "Bremer", ruolo: "Dc", voto: 6.5, tipo: "D" },
-        { nome: "Dimarco", ruolo: "E", voto: 7.5, tipo: "D" },
-        { nome: "Locatelli", ruolo: "M", voto: 6, tipo: "C" },
-        { nome: "Osimhen", ruolo: "Pc", voto: 7.5, tipo: "A" }
-      ]
-    };
-
-    function caricaSquadre() {
-      const select = document.getElementById("squadra");
-      const elenco = document.getElementById("elencoSquadre");
-      for (let nome in rose) {
-        const opt = document.createElement("option");
-        opt.value = nome;
-        opt.textContent = nome;
-        select.appendChild(opt);
-
-        const li = document.createElement("li");
-        li.textContent = nome;
-        elenco.appendChild(li);
-      }
-    }
-
-    function mostraGiocatori() {
-      const squadra = document.getElementById("squadra").value;
-      const container = document.getElementById("giocatoriContainer");
-      container.innerHTML = "";
-      rose[squadra].forEach((g, i) => {
-        const div = document.createElement("div");
-        div.innerHTML = `<input type='checkbox' id='giocatore_${i}' data-nome='${g.nome}' data-ruolo='${g.ruolo}' data-tipo='${g.tipo}' data-voto='${g.voto}'><label for='giocatore_${i}'>${g.nome} (${g.ruolo})</label>`;
-        container.appendChild(div);
-      });
-    }
-
-    function calcolaPunteggio() {
-      const container = document.getElementById("giocatoriContainer");
-      const checkboxes = container.querySelectorAll("input[type='checkbox']");
-      let totale = 0;
-      let dcVotes = [];
-      let aliVotes = [];
-      let centroVotes = [];
-      let numTrequartisti = 0;
-      let numMedianiAvversario = 1; // esempio fisso per la demo
-
-      checkboxes.forEach(cb => {
-        if (cb.checked) {
-          const voto = parseFloat(cb.dataset.voto);
-          const ruolo = cb.dataset.ruolo;
-          totale += voto;
-
-          if (ruolo === "Dc") dcVotes.push(voto);
-          if (["Ds", "Dd", "E", "W"].includes(ruolo)) aliVotes.push(voto);
-          if (["M", "C", "T"].includes(ruolo)) centroVotes.push(voto);
-          if (ruolo === "T") numTrequartisti++;
-        }
-      });
-
-      let modDifesa = dcVotes.reduce((acc, v) => acc + (v - 6), 0);
-      modDifesa = modDifesa / 2;
-
-      const sommaAli = aliVotes.reduce((a, b) => a + b, 0);
-      let bonusAssist = 0;
-      if (sommaAli >= 6 && sommaAli < 12) bonusAssist = 1;
-      else if (sommaAli >= 12) bonusAssist = 2;
-
-      const mediaCentro = centroVotes.length ? centroVotes.reduce((a, b) => a + b, 0) / centroVotes.length : 0;
-      const modCentro = mediaCentro + centroVotes.length - (5 + 3);
-
-      let bonusTrequarti = 0;
-      if (numTrequartisti > numMedianiAvversario) bonusTrequarti = 1.5;
-
-      const totaleFinale = totale + modCentro + bonusTrequarti;
-
-      document.getElementById("risultato").textContent = `Totale Voto: ${totale.toFixed(2)}, Mod. Centrocampo: ${modCentro.toFixed(2)}, Bonus T: ${bonusTrequarti}, Totale Finale: ${totaleFinale.toFixed(2)} (Mod. Difesa tolto all'avversario: ${modDifesa.toFixed(2)})`;
-    }
-
-    function salvaFormazione() {
-      const squadra = document.getElementById("squadra").value;
-      const container = document.getElementById("giocatoriContainer");
-      const checkboxes = container.querySelectorAll("input[type='checkbox']");
-      const formazione = [];
-      checkboxes.forEach(cb => {
-        if (cb.checked) formazione.push(cb.dataset.nome);
-      });
-      localStorage.setItem(`formazione_${squadra}`, JSON.stringify(formazione));
-      alert("Formazione salvata!");
-    }
-
-    document.getElementById("squadra").addEventListener("change", mostraGiocatori);
-    window.onload = () => {
-      caricaSquadre();
-      mostraGiocatori();
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
